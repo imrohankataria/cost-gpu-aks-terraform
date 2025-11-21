@@ -88,12 +88,6 @@ variable "network_policy" {
   default     = "azure"
 }
 
-variable "enable_pod_security_policy" {
-  description = "Enable pod security policy"
-  type        = bool
-  default     = false
-}
-
 variable "enable_rbac" {
   description = "Enable role-based access control"
   type        = bool
