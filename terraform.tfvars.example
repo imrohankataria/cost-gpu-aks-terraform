@@ -1,0 +1,52 @@
+# Example Terraform variables file
+# Copy this file to terraform.tfvars and customize the values
+
+# Resource configuration
+resource_group_name = "rg-aks-gpu"
+location            = "eastus"
+
+# Cluster configuration
+cluster_name       = "aks-gpu-cluster"
+kubernetes_version = "1.27.7"
+dns_prefix         = "aks-gpu"
+
+# System node pool configuration
+system_node_count   = 1
+system_node_vm_size = "Standard_D2s_v3"
+
+# GPU node pool configuration
+gpu_node_count     = 1
+gpu_node_min_count = 0
+gpu_node_max_count = 3
+gpu_node_vm_size   = "Standard_NC4as_T4_v3"  # NVIDIA T4 GPU
+
+# Autoscaling
+enable_auto_scaling = true
+
+# Network configuration
+network_plugin = "azure"
+network_policy = "azure"
+
+# Observability
+enable_log_analytics         = true
+log_analytics_workspace_sku  = "PerGB2018"
+log_retention_days           = 30
+
+# Security
+enable_rbac         = true
+enable_azure_policy = false
+
+# GPU node taints (prevents non-GPU workloads from being scheduled on GPU nodes)
+gpu_node_taints = ["sku=gpu:NoSchedule"]
+
+# Cost optimization with spot instances (optional)
+spot_instances_enabled = false
+spot_max_price         = -1  # -1 means pay up to on-demand price
+
+# Tags
+tags = {
+  Environment = "Development"
+  ManagedBy   = "Terraform"
+  Purpose     = "GPU-AKS"
+  CostCenter  = "Engineering"
+}
