@@ -1,0 +1,47 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gpu-workload
+  labels:
+    app: gpu-workload
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gpu-workload
+  template:
+    metadata:
+      labels:
+        app: gpu-workload
+    spec:
+      # Toleration to allow scheduling on GPU nodes
+      tolerations:
+        - key: "sku"
+          operator: "Equal"
+          value: "gpu"
+          effect: "NoSchedule"
+      # Node selector to ensure pods run on GPU nodes
+      nodeSelector:
+        gpu-enabled: "true"
+      containers:
+        - name: cuda-app
+          image: nvidia/cuda:11.8.0-base-ubuntu22.04
+          command: ["bash", "-c"]
+          args:
+            - |
+              while true; do
+                echo "Running on GPU node at $(date)"
+                nvidia-smi --query-gpu=name,memory.total,memory.used \
+                --format=csv
+                sleep 60
+              done
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+              memory: "4Gi"
+              cpu: "2"
+            requests:
+              nvidia.com/gpu: 1
+              memory: "2Gi"
+              cpu: "1"
