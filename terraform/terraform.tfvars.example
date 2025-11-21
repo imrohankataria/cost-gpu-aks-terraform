@@ -1,0 +1,51 @@
+# Example terraform.tfvars file
+# Copy this file to terraform.tfvars and customize the values
+
+resource_group_name = "rg-aks-gpu-cluster"
+location           = "eastus"
+cluster_name       = "aks-gpu-cluster"
+environment        = "dev"
+kubernetes_version = "1.28.0"
+
+# Cost Center for billing
+cost_center = "engineering"
+
+# Network Configuration
+vnet_address_space        = "10.1.0.0/16"
+aks_subnet_address_prefix = "10.1.1.0/24"
+
+# System Node Pool (for cluster management)
+system_node_count     = 2
+system_node_min_count = 1
+system_node_max_count = 3
+system_node_size      = "Standard_D4s_v3"
+
+# GPU Node Configuration
+# Available sizes: Standard_NC6s_v3, Standard_NC12s_v3, Standard_NC24s_v3
+gpu_node_size = "Standard_NC6s_v3"
+
+# GPU Spot Node Pool (Cost-Optimized)
+gpu_spot_node_count = 1
+gpu_spot_min_count  = 0  # Can scale to zero
+gpu_spot_max_count  = 10
+spot_max_price      = -1  # -1 means market price
+
+# GPU On-Demand Node Pool (Reliable)
+gpu_ondemand_node_count = 1
+gpu_ondemand_min_count  = 1  # Always have at least 1
+gpu_ondemand_max_count  = 5
+
+# Monitoring and Logging
+log_retention_days = 30
+
+# Cost Governance
+monthly_budget_amount = 5000
+budget_alert_emails   = ["your-email@example.com"]
+
+# Tags
+tags = {
+  Project     = "AKS-GPU-Cost-Optimization"
+  Environment = "dev"
+  ManagedBy   = "Terraform"
+  CostCenter  = "engineering"
+}
